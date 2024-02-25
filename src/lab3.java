@@ -1,12 +1,22 @@
 import java.util.Scanner;
 
 public class lab3 {
+
+    int a = 12;
     static Scanner value = new Scanner(System.in);
     static int[] array;
+
+    static void arra(){
+        int [] arr = {1,2,1,2};
+
+    }
+
+
 
     public static void main(String[] args) {
         GerArray();
         Solution();
+        arra();
         //PrintArray();
 
     }
