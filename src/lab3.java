@@ -1,52 +1,60 @@
-import java.util.Scanner;
-
 public class lab3 {
-
-    static Scanner value = new Scanner(System.in);
-    static int[] array;
-
     public static void main(String[] args) {
-        GerArray();
-        Solution();
-        //PrintArray();
+        int[] array = {1,3,2,2,2};
+        String result = findLongestSubsequences(array);
 
-    }
-    public static void GerArray() {
+        System.out.println("Самая длинная подпоследовательность :");
+        String[] subsequences = result.split(";");
+        for (String subsequence : subsequences) {
+            String[] parts = subsequence.split(",");
+            int startIndex = Integer.parseInt(parts[0]);
+            int length = Integer.parseInt(parts[1]);
 
-        System.out.print("Задайте размерность массива: ");
-        int size = value.nextInt();
-        array = new int[size];
-        System.out.println("Введите значения массива: ");
-
-        for (int i = 0; i < array.length; i++) {
-            System.out.print(i + 1 + ") ");
-            array[i] = value.nextInt();
+            System.out.print("Подпоследовательность: ");
+            for (int i = startIndex; i < startIndex + length; i++) {
+                System.out.print(array[i] + " ");
+            }
+            System.out.println("\nПозиция: " + startIndex + ", Длина: " + length);
         }
     }
 
-    public static void Solution() {
-        int count = 0, countMax = 0;
+    public static String findLongestSubsequences(int[] array) {
+        StringBuilder result = new StringBuilder();
+        int maxLength = 0;
+
         for (int i = 0; i < array.length - 1; i++) {
-            if (array[i] == array[i + 1]) {
-                count++;
-            }
-            if(array[i] != array[i + 1]){
-                count = 0;
-            }
-            if (count > countMax) {
-                countMax = count;
+            int currentLength = 1;
+            int mismatchCount = 0;
+            int[] candidates = new int[2];
+            int candidateCount = 0;
+
+            for (int j = i; j < array.length - 1; j++) {
+                if (array[j] != array[j + 1]) {
+                    mismatchCount++;
+                    if (mismatchCount > 2) {
+                        break;
+                    }
+                    if (candidateCount < 2) {
+                        candidates[candidateCount++] = j;
+                    }
+                }
+                currentLength++;
+
+                if (currentLength > maxLength && mismatchCount <= 2) {
+                    maxLength = currentLength;
+                    // Очищаем результат и добавляем новую подпоследовательность
+                    result.setLength(0);
+                    result.append(i).append(",").append(currentLength).append(";");
+                } else if (currentLength == maxLength && mismatchCount <= 2) {
+                    // Добавляем еще одну подпоследовательность той же длины
+                    result.append(i).append(",").append(currentLength).append(";");
+                }
             }
         }
-        countMax++; // поскольку числа смотрятся парами, пропадает одно значение счетчика
-        System.out.println("Максимальное кол-во одинаковых элементов: " +countMax);
-
+        // Убираем последний символ ";", который лишний
+        if (result.length() > 0) {
+            result.setLength(result.length() - 1);
+        }
+        return result.toString();
     }
 }
-
-//    public static void PrintArray() {
-//        for (int i = 0; i < array.length; i++) {
-//            System.out.println(i + 1 + ") " + array[i]);
-//        }
-//    }
-
-
